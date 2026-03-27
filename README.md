@@ -4,6 +4,12 @@ A modern, visually stunning health monitoring dashboard designed for care manage
 
 ---
 
+> [!IMPORTANT]
+> **Why SQLite?**
+> Originally, this project used MongoDB, but it led to frequent `ENOSPC` (disk space) errors during setup. To ensure a **Zero-Setup** and **Stable** experience, we have transitioned to **SQLite**. No external database installation is required for local development.
+
+---
+
 ## 🌟 Key Features
 
 ### 🧠 Intelligent Alert Engine
