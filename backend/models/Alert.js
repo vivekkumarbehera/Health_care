@@ -1,10 +1,15 @@
-const mongoose = require('mongoose');
+const { DataTypes } = require('sequelize');
+const sequelize = require('../config/database');
+const User = require('./User');
 
-const AlertSchema = new mongoose.Schema({
-  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-  message: { type: String, required: true },
-  severity: { type: String, enum: ['Critical', 'Warning', 'Normal'], default: 'Normal' },
-  timestamp: { type: Date, default: Date.now }
+const Alert = sequelize.define('Alert', {
+  id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+  message: { type: DataTypes.STRING, allowNull: false },
+  severity: { type: DataTypes.ENUM('Alert', 'Warning', 'Critical'), defaultValue: 'Alert' },
 });
 
-module.exports = mongoose.model('Alert', AlertSchema);
+// Relationships
+Alert.belongsTo(User, { foreignKey: 'userId', as: 'user' });
+User.hasMany(Alert, { foreignKey: 'userId' });
+
+module.exports = Alert;

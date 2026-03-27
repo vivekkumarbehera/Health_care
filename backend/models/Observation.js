@@ -1,9 +1,14 @@
-const mongoose = require('mongoose');
+const { DataTypes } = require('sequelize');
+const sequelize = require('../config/database');
+const User = require('./User');
 
-const ObservationSchema = new mongoose.Schema({
-  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-  note: { type: String, required: true },
-  timestamp: { type: Date, default: Date.now }
+const Observation = sequelize.define('Observation', {
+  id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+  note: { type: DataTypes.STRING, allowNull: false },
 });
 
-module.exports = mongoose.model('Observation', ObservationSchema);
+// Relationships
+Observation.belongsTo(User, { foreignKey: 'userId', as: 'user' });
+User.hasMany(Observation, { foreignKey: 'userId' });
+
+module.exports = Observation;

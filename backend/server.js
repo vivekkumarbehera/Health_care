@@ -1,5 +1,5 @@
 const express = require('express');
-const mongoose = require('mongoose');
+const sequelize = require('./config/database');
 const cors = require('cors');
 const path = require('path');
 require('dotenv').config();
@@ -12,9 +12,16 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/healthcare')
-  .then(() => console.log('MongoDB connected'))
-  .catch(err => console.log('MongoDB connection error:', err));
+const connectDB = async () => {
+  try {
+    await sequelize.sync({ alter: true }); // creates tables if they don't exist
+    console.log('SQLite successfully connected and synchronized via Sequelize.');
+  } catch (err) {
+    console.error('SQLite connection error:', err);
+  }
+};
+
+connectDB();
 
 app.use('/auth', authRoutes);
 app.use('/api', healthRoutes);
